@@ -1,0 +1,65 @@
+import mysql.connector
+
+conn_obj=mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="R@jdeep123",
+    database="python_project_day_1_march_25")
+cur_obj=conn_obj.cursor()
+
+#Define function data_entry_sql
+def data_entry_sql(full_name,address,ph_no,user_name,password):
+
+    # Build the query with user-provided name using LIKE operator
+    sql = "INSERT INTO c_details(full_name, address, ph_no, user_id, password) VALUES (%s, %s, %s, %s, %s)"
+    data = (full_name,address,ph_no,user_name,password)
+
+    try:
+        cur_obj.execute(sql, data)
+        print("New customer entry successful, you can login now....")
+        conn_obj.commit()
+    except mysql.connector.Error as e:
+        print("Error retrieving data from MySQL:", e)
+        conn_obj.rollback()
+
+#Define function data_retrieve
+def data_retrieve(user_name):
+    query = f"select * from c_details WHERE user_id='{user_name}'"
+    try:
+        cur_obj.execute(query)
+        result = cur_obj.fetchone()
+        conn_obj.commit()
+    except mysql.connector.Error as e:
+        print("Error retrieving data from MySQL:", e)
+        conn_obj.rollback()
+
+    return result
+def new_user_creation():
+    full_name=input("Please enter you full name-> ")
+    address=input("Please enter your address-> ")
+    ph_no = input("Please enter your phone number-> ")
+    user_name = input("Please set your user_name-> ")
+    password = input("Please set your password -> ")
+    data_entry_sql(full_name,address,ph_no,user_name,password)
+### main logic
+print("Welcome to RDP FIRST APP...")
+res=input("1 - Login \n2 - new user? Register yourself\nEnter here--> ")
+if res=='1':
+    user_name = input("Please set your user_name-> ")
+    password = input("Please set your password -> ")
+    result_from_db=data_retrieve(user_name)
+    if result_from_db:
+        cust_pwd_from_db=result_from_db[-1]
+        if cust_pwd_from_db==password:
+            print("login success...")
+        else:
+            print("access denied...")
+    else:
+        print("User_id not found. Please register yourself...")
+        new_user_creation()
+elif res=='2':
+    # new user creation
+    new_user_creation()
+else:
+    print("invalid choice... ")
+conn_obj.close()
