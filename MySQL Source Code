@@ -1,0 +1,21 @@
+create database python_project_day_1_march_25;
+use python_project_day_1_march_25;
+
+CREATE TABLE c_details (
+    c_id INT AUTO_INCREMENT PRIMARY KEY,
+    full_name VARCHAR(200) NOT NULL,
+    address VARCHAR(255),
+    ph_no VARCHAR(10),
+    user_id VARCHAR(50) NOT NULL,
+    password VARCHAR(100) NOT NULL
+) AUTO_INCREMENT = 1;
+describe c_details;
+
+INSERT INTO c_details (full_name, address, ph_no, user_id, password)
+VALUES ('Rajdeep Bhadra', 'Kolkata, West Bengal', '9876543210', 'rajdeep123', 'R@jdeep#2025');
+
+select * from c_details;
+
+select * from c_details where user_id='Raj@123';
+
+truncate table c_details;
